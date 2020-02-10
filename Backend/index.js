@@ -1,7 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
 const path = require('path');
-const exphbs = require('express-handlebars');
 const session = require('express-session');
 const validator = require('express-validator');
 const passport = require('passport');
@@ -23,34 +22,33 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
-app.use(session({
-  secret: 'faztmysqlnodemysql',
-  resave: false,
-  saveUninitialized: false,
-  store: new MySQLStore(database)
-}));
-app.use(flash());
-app.use(passport.initialize());
-app.use(passport.session());
-app.use(validator());
+// app.use(session({
+//   secret: 'faztmysqlnodemysql',
+//   resave: false,
+//   saveUninitialized: false,
+//   store: new MySQLStore(database)
+// }));
+// app.use(flash());
+// app.use(passport.initialize());
+// app.use(passport.session());
+// app.use(validator());
 
 // Global variables
-app.use((req, res, next) => {
-  app.locals.message = req.flash('message');
-  app.locals.success = req.flash('success');
-  app.locals.user = req.user;
-  next();
-});
+// app.use((req, res, next) => {
+//   app.locals.message = req.flash('message');
+//   app.locals.success = req.flash('success');
+//   app.locals.user = req.user;
+//   next();
+// });
 
 // Routes
 app.use(require('./routes/index'));
-app.use(require('./routes/authentication'));
-app.use('/links', require('./routes/links'));
+//app.use(require('./routes/authentication'));
 
 // Public
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
 
-// Starting
+// Starting the server
 app.listen(app.get('port'), () => {
   console.log('Server is in port', app.get('port'));
 });
