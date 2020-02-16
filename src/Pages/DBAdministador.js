@@ -8,9 +8,9 @@ export default class Users extends Component {
         this.variable ='v'
         this.state = {
             bases: [],
-            tablas:[],
-            columnas1:[],
-            columnas2:[],
+            tablas: [],
+            columnas1: [],
+            columnas2: [],
             
             
         }
@@ -22,7 +22,7 @@ export default class Users extends Component {
             method: 'GET'
         }).then(function(response) {
             if (response.status >= 400) {
-                throw new Error("Bad response from server");
+                throw new Error("Error 1");
             }
             return response.json();
         }).then(function(data) {
@@ -30,62 +30,33 @@ export default class Users extends Component {
         }).catch(err => {
         console.log('caught it!',err);
         })
-    }
-
-
-    OptionChange = e => {
-        console.log("El campo ha cambiado")
-       this.variable = 'Tables_in_'.concat(e.target.value)
-        console.log(this.variable);
-        
-        // let self = this;
-        // fetch("/tablas", {
-        //     method: 'POST',
-        //     body: JSON.stringify(this.variable)
-        // }).then(function(response) {
-        //     if (response.status >= 400) {
-        //         throw new Error("Bad response from server");
-        //     }
-        //     return response.json();
-        // }).then(function(data) {
-        //     self.setState({tablas: data});
-        // }).catch(err => {
-        // console.log('caught it!',err);
-        // })
         
     }
-    handleTab(event) {
-        //Edit functionality
-        event.preventDefault()
-        var data = {
-           // name: event.target.value
-            name: 'db_links'
-        }
-        fetch("/tablas", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
+
+    handleChange() {
+        let self = this;
+        fetch('/Tabs', {
+            method: 'GET'
         }).then(function(response) {
             if (response.status >= 400) {
-                throw new Error("Bad response from server");
+                throw new Error("No hay respuesta en la DBA");
             }
             return response.json();
         }).then(function(data) {
-            this.setState({tablas: data});
-        }).catch(function(err) {
-            console.log(err)
-        });
+            self.setState({tablas: data});
+        }).catch(err => {
+        console.log('caught it!',err);
+        })
     }
 
+    
     render() {
         return (
         <MDBContainer> 
             <MDBRow>
                 <MDBCol size='4'>
                     <h2>Base de Datos</h2>
-                    <select className="browser-default custom-select" onChange={this.handleTab}>
+                    <select className="browser-default custom-select" onChange={this.handleChange}>
                         {this.state.bases.map(base =>
                             <option value={base.id}>{base.Database} </option>
                         )}
@@ -95,11 +66,10 @@ export default class Users extends Component {
             <MDBRow>
                 <MDBCol size='4'>
                     <h2>Tablas</h2>
-                    <select className="browser-default custom-select" onChange={this.OptionChange}>
+                    <select className="browser-default custom-select" >
                         {this.state.tablas.map(tabla =>
-                            <option value={tabla.id}>{tabla.this.variable} </option>
+                            <option value={tabla.id}>{tabla.Database} </option>
                         )}
-                        console.log(this.variable)
                     </select>
                 </MDBCol>
             </MDBRow>
